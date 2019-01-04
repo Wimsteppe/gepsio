@@ -150,7 +150,7 @@ namespace JeffFerguson.Gepsio
         internal XbrlSchema(XbrlFragment ContainingXbrlFragment, string SchemaFilename, string BaseDirectory)
         {
             this.Fragment = ContainingXbrlFragment;
-            this.SchemaReferencePath = GetFullSchemaPath(SchemaFilename, BaseDirectory);
+            this.SchemaReferencePath = GetSchemaReferencePath(ContainingXbrlFragment, SchemaFilename, BaseDirectory);
             this.LoadPath = this.SchemaReferencePath;
             try
             {
@@ -215,6 +215,13 @@ namespace JeffFerguson.Gepsio
             ReadComplexTypes();
             ReadElements();
             LookForAnnotations();
+        }
+
+        private string GetSchemaReferencePath(XbrlFragment containingXbrlFragment, string schemaFilename, string baseDirectory)
+        {
+            return string.IsNullOrEmpty(containingXbrlFragment.Document.TaxonomyPath) ? 
+                GetFullSchemaPath(schemaFilename, baseDirectory) :
+                Path.Combine(containingXbrlFragment.Document.TaxonomyPath, schemaFilename);
         }
 
         /// <summary>

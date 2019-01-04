@@ -97,6 +97,11 @@ namespace JeffFerguson.Gepsio
         public string Path { get; private set; }
 
         /// <summary>
+        /// The path to the XBRL taxonomy to be used.
+        /// </summary>
+        public string TaxonomyPath { get; private set; }
+
+        /// <summary>
         /// A collection of <see cref="XbrlFragment"/> objects that contain the document's
         /// XBRL data.
         /// </summary>
@@ -170,12 +175,17 @@ namespace JeffFerguson.Gepsio
         /// <param name="Filename">
         /// The filename of the XML document to load.
         /// </param>
-        public void Load(string Filename)
+        public void Load(string Filename, string taxonomyPath = null)
         {
             var SchemaValidXbrl = Container.Resolve<IDocument>();
             SchemaValidXbrl.Load(Filename);
             this.Filename = Filename;
             this.Path = System.IO.Path.GetDirectoryName(this.Filename);
+            if (!string.IsNullOrEmpty(taxonomyPath))
+            {
+                this.TaxonomyPath = System.IO.Path.GetFullPath(TaxonomyPath);
+            }
+
             Parse(SchemaValidXbrl);
         }
 
